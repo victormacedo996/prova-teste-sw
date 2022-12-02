@@ -18,10 +18,9 @@ public abstract class BaseTest{
 	public static void iniciar() {
 		
 		System.setProperty("webdriver.chrome.driver", PATH_DRIVE);
-		// ChromeOptions options = new ChromeOptions();
-		// options.addArguments("--headless");
-		// driver = new ChromeDriver(options);
-		driver = new ChromeDriver();
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--headless");
+		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
 		driver.get(URL_BASE_SISTEMA);
 		

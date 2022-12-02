@@ -47,41 +47,22 @@ public class ProductInsertTest extends BaseTest {
     @Test
     public void TC002_LetraNoPreco(){
         productInsertTestPO.openCadastrarProduto();
-        productInsertTestPO.escrever(productInsertTestPO.inputCodigo, "1");
-        productInsertTestPO.escrever(productInsertTestPO.inputNome, "Fulano");
-        productInsertTestPO.escrever(productInsertTestPO.inputQuantidade, "a");
-        productInsertTestPO.escrever(productInsertTestPO.inputValor, "10");
-        productInsertTestPO.escrever(productInsertTestPO.inputData, "08-20-1985");
-        productInsertTestPO.saveButton.click();
+        productInsertTestPO.cadastrarProduto("1", "borracha", "1", "a", "08-20-1985");
         String mensagem = productInsertTestPO.obterMensagem();
         assertEquals(mensagem, "A quantidade deve ser um número");
     }
 
     @Test
     public void TC003_DataFormat(){
-        productInsertTestPO.openCadastrarProduto();
-        productInsertTestPO.escrever(productInsertTestPO.inputCodigo, "1");
-        productInsertTestPO.escrever(productInsertTestPO.inputNome, "Fulano");
-        productInsertTestPO.escrever(productInsertTestPO.inputQuantidade, "10");
-        productInsertTestPO.escrever(productInsertTestPO.inputValor, "10");
-        productInsertTestPO.escrever(productInsertTestPO.inputData, "20-20-1985");
-        productInsertTestPO.saveButton.click();
+        productInsertTestPO.cadastrarProduto("1", "lápis", "1", "1.5", "20-20-1985");
         String mensagem = productInsertTestPO.obterMensagem();
         assertEquals(mensagem, "A data deve estar no formato mês/dia/ano (mm/dd/aaaa)");
     }
 
     @Test
     public void TC004_ProdutoCadastrado(){
-        productInsertTestPO.openCadastrarProduto();
-        productInsertTestPO.escrever(productInsertTestPO.inputCodigo, "1");
-        productInsertTestPO.escrever(productInsertTestPO.inputNome, "Fulano");
-        productInsertTestPO.escrever(productInsertTestPO.inputQuantidade, "10");
-        productInsertTestPO.escrever(productInsertTestPO.inputValor, "100");
-        productInsertTestPO.escrever(productInsertTestPO.inputData, "02-20-1985");
-        productInsertTestPO.saveButton.click();
-        productInsertTestPO.exitButton.click();
+        productInsertTestPO.cadastrarProduto("1", "Caneta", "1", "1.5", "02-20-2020");
         List<WebElement> tableRow = productInsertTestPO.insertedData.findElements(By.tagName("td"));
-
         String codigo = tableRow.get(0).getText();
         String nome = tableRow.get(1).getText();
         String quantity = tableRow.get(2).getText();
@@ -89,17 +70,25 @@ public class ProductInsertTest extends BaseTest {
         String creationDate = tableRow.get(4).getText();
 
         assertEquals(codigo, "1");
-        assertEquals(nome, "Fulano");
-        assertEquals(quantity, "10");
-        assertEquals(value, "100");
-        assertEquals(creationDate, "1985-02-20");
-        
+        assertEquals(nome, "Caneta");
+        assertEquals(quantity, "1");
+        assertEquals(value, "1.5");
+        assertEquals(creationDate, "2020-02-20");
     }
 
+    @Test
+    public void TC005_ValorDecimalSeparadoPorPonto(){
+        productInsertTestPO.cadastrarProduto("1", "Caneta", "1", "1,5", "02-20-2020");
+        String mensagem = productInsertTestPO.obterMensagem();
+        assertEquals(mensagem, "Os numeros decimais do valor devem ser separados por ponto, não por vírgula");
+    }
 
+    @Test
+    public void TC006_AbrirCadastrarProduto(){
+        productInsertTestPO.buttonCriar.click();
+        String modalTitle = productInsertTestPO.modalTitle.getText();
 
-
-
-
+        assertEquals(modalTitle, "Produto");
+    }
     
 }
